@@ -73,7 +73,13 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
     .map((b: { text: string }) => b.text)
     .join("\n");
 
-  const parsed: Digest = JSON.parse(text.replace(/```json|```/g, "").trim());
+  // Extract JSON from response — Claude may wrap it in text or markdown fences
+  const cleaned = text.replace(/```json|```/g, "").trim();
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error(`No JSON found in response: ${cleaned.slice(0, 200)}`);
+  }
+  const parsed: Digest = JSON.parse(jsonMatch[0]);
   parsed.generatedAt = new Date().toISOString();
 
   // Store in KV
