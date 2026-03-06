@@ -9,6 +9,7 @@ export const MOCK_DIGEST: Digest = {
       titre: "La guerre civile n'aura pas lieu",
       auteur: "Nicolas Prissette, Emmanuel Rivière",
       editeur: "Seuil",
+      parution: "5 mars 2026",
       presentation:
         "L'essai La guerre civile n'aura pas lieu de Nicolas Prissette et Emmanuel Rivière bat en brèche l'idée selon laquelle la France serait au bord de l'implosion et « archipelisée » sous la pression de l'immigration, du wokisme, de l'insécurité, etc. Pour les auteurs, le débat public actuel ne reflète pas fidèlement l'état de l'opinion publique : les Français se retrouvent bien autour de valeurs positives (solidarité, cohésion, citoyenneté…), mais leurs attentes politiques et économiques restent insatisfaites.",
     },
@@ -17,6 +18,7 @@ export const MOCK_DIGEST: Digest = {
       titre: "La démocratie n'est pas l'élection",
       auteur: "Edwy Plenel",
       editeur: "La Découverte",
+      parution: "4 mars 2026",
       presentation:
         "Dans La démocratie n'est pas l'élection, Edwy Plenel évoque le caractère dual du vote en démocratie. Il permet la représentativité certes, mais il est aussi utilisé comme un argument de légitimité incontestable justifiant des attaques contre l'État de droit dans des régimes autoritaires. Pour l'auteur, la France devrait se défaire de son obsession pour le vote et se tourner davantage vers de nouvelles sources de vitalité démocratique : les vies associative, culturelle, citoyenne et médiatique.",
     },
@@ -25,6 +27,7 @@ export const MOCK_DIGEST: Digest = {
       titre: "La sinistre comédie",
       auteur: "Collectif d'avocats",
       editeur: "Fayard",
+      parution: "6 mars 2026",
       presentation:
         "Dans La sinistre comédie, les avocats de la défense de D. B., première femme condamnée à la perpétuité incompressible pour le meurtre de Lola, racontent l'intérieur de l'affaire et la récupération politique cynique qui l'a accompagnée. Ils constatent un affaiblissement de l'État de droit face aux appels à une justice expéditive et à un rétablissement de la peine de mort formulés par une élite politique et médiatique s'acharnant sur l'affaire et contre les avocats « du mal ».",
     },

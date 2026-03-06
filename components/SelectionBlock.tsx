@@ -13,6 +13,7 @@ export default function SelectionBlock({ selection }: { selection: BookSelection
             <h3 className="selection-titre">{book.titre}</h3>
             <p className="selection-meta">
               {book.auteur} &middot; {book.editeur}
+              {book.parution && <> &middot; Parution {book.parution}</>}
             </p>
             <p className="selection-presentation">{book.presentation}</p>
           </div>

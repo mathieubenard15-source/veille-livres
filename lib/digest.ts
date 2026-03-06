@@ -15,6 +15,7 @@ export interface BookSelection {
   titre: string;
   auteur: string;
   editeur: string;
+  parution: string;
   presentation: string;
 }
 
