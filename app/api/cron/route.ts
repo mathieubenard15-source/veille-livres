@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateDigest } from "@/lib/digest";
+import { sendTelegramNotification } from "@/lib/telegram";
 
 export async function GET(request: NextRequest) {
   const auth = request.headers.get("authorization");
@@ -8,7 +9,23 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { slug } = await generateDigest();
+    const { digest, slug } = await generateDigest();
+
+    const bookCount =
+      (digest.livresMajeurs?.length || 0) +
+      (digest.livresInteressants?.length || 0) +
+      (digest.livresSpecialises?.length || 0);
+
+    const top3 = digest.selection
+      .map((s) => `  ${s.rang}. <i>${s.titre}</i> — ${s.auteur}`)
+      .join("\n");
+
+    await sendTelegramNotification(
+      `<b>Veille Livres</b> — Semaine ${digest.semaine}\n\n` +
+        `<b>Selection :</b>\n${top3}\n\n` +
+        `${bookCount} livres au catalogue cette semaine.`
+    );
+
     return NextResponse.json({ success: true, slug });
   } catch (error) {
     console.error("Cron error:", error);
