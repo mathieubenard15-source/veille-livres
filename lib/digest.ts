@@ -54,7 +54,7 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-6",
-      max_tokens: 2500,
+      max_tokens: 8000,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: getUserPrompt(weekLabel) }],
       tools: [{ type: "web_search_20250305", name: "web_search" }],
@@ -79,7 +79,26 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
   if (!jsonMatch) {
     throw new Error(`No JSON found in response: ${cleaned.slice(0, 200)}`);
   }
-  const parsed: Digest = JSON.parse(jsonMatch[0]);
+
+  let jsonStr = jsonMatch[0];
+  // Fix trailing commas before ] or }
+  jsonStr = jsonStr.replace(/,\s*([}\]])/g, "$1");
+
+  let parsed: Digest;
+  try {
+    parsed = JSON.parse(jsonStr);
+  } catch {
+    // Truncated JSON — try to close open structures
+    let attempt = jsonStr;
+    const openBrackets = (attempt.match(/\[/g) || []).length - (attempt.match(/\]/g) || []).length;
+    const openBraces = (attempt.match(/\{/g) || []).length - (attempt.match(/\}/g) || []).length;
+    // Remove trailing partial values
+    attempt = attempt.replace(/,\s*"[^"]*"?\s*:?\s*"?[^"]*$/, "");
+    for (let i = 0; i < openBrackets; i++) attempt += "]";
+    for (let i = 0; i < openBraces; i++) attempt += "}";
+    attempt = attempt.replace(/,\s*([}\]])/g, "$1");
+    parsed = JSON.parse(attempt);
+  }
   parsed.generatedAt = new Date().toISOString();
 
   // Store in KV
