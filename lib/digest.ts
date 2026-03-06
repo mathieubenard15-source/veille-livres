@@ -53,7 +53,7 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
       "anthropic-beta": "web-search-2025-03-05",
     },
     body: JSON.stringify({
-      model: "claude-opus-4-5",
+      model: "claude-sonnet-4-6",
       max_tokens: 2500,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: getUserPrompt(weekLabel) }],
