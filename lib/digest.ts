@@ -1,7 +1,14 @@
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 import { SYSTEM_PROMPT, getUserPrompt, getWeekLabel, getWeekKey } from "./prompt";
 
 const kvAvailable = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+
+function getKv() {
+  return new Redis({
+    url: process.env.KV_REST_API_URL!,
+    token: process.env.KV_REST_API_TOKEN!,
+  });
+}
 
 export interface BookSelection {
   rang: number;
@@ -70,6 +77,7 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
   parsed.generatedAt = new Date().toISOString();
 
   // Store in KV
+  const kv = getKv();
   await kv.set(`digest:${slug}`, JSON.stringify(parsed), { ex: 365 * 24 * 3600 });
   await kv.set("digest:latest", `digest:${slug}`);
 
@@ -84,6 +92,7 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
 
 export async function getDigest(slug?: string): Promise<Digest | null> {
   if (!kvAvailable) return null;
+  const kv = getKv();
   let key: string;
   if (slug) {
     key = `digest:${slug}`;
@@ -99,5 +108,6 @@ export async function getDigest(slug?: string): Promise<Digest | null> {
 
 export async function listArchives(): Promise<string[]> {
   if (!kvAvailable) return [];
+  const kv = getKv();
   return kv.lrange<string>("digest:index", 0, -1);
 }
