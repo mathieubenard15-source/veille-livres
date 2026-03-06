@@ -70,11 +70,21 @@ export default function DigestView({
       )}
 
       <header className="digest-hero">
-        {isCurrent && <h1 className="digest-title">Veille Livres</h1>}
-        <p className="digest-semaine">Semaine {digest.semaine}</p>
-        {generatedDate && (
-          <p className="digest-date">Généré le {generatedDate}</p>
-        )}
+        <div className="digest-hero-top">
+          <div>
+            {isCurrent && <h1 className="digest-title">Veille Livres</h1>}
+            <p className="digest-semaine">Semaine {digest.semaine}</p>
+            {generatedDate && (
+              <p className="digest-date">Généré le {generatedDate}</p>
+            )}
+          </div>
+          <a
+            href={`/api/docx${archiveSlug ? `?slug=${archiveSlug}` : ""}`}
+            className="download-btn"
+          >
+            Télécharger .docx
+          </a>
+        </div>
       </header>
 
       {digest.selection && digest.selection.length > 0 && (
