@@ -1,6 +1,8 @@
 import { kv } from "@vercel/kv";
 import { SYSTEM_PROMPT, getUserPrompt, getWeekLabel, getWeekKey } from "./prompt";
 
+const kvAvailable = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+
 export interface BookSelection {
   rang: number;
   titre: string;
@@ -81,6 +83,7 @@ export async function generateDigest(): Promise<{ digest: Digest; slug: string }
 }
 
 export async function getDigest(slug?: string): Promise<Digest | null> {
+  if (!kvAvailable) return null;
   let key: string;
   if (slug) {
     key = `digest:${slug}`;
@@ -95,5 +98,6 @@ export async function getDigest(slug?: string): Promise<Digest | null> {
 }
 
 export async function listArchives(): Promise<string[]> {
+  if (!kvAvailable) return [];
   return kv.lrange<string>("digest:index", 0, -1);
 }
